@@ -1,0 +1,10 @@
+- name: Bootstrap server for k8s
+  hosts: localhost
+  become: true
+
+  roles:
+    - common
+    - git
+    - podman
+    - k3s
+

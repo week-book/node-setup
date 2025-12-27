@@ -1,0 +1,13 @@
+- name: Update apt cache
+  apt:
+    update_cache: true
+
+- name: Install base packages
+  apt:
+    name:
+      - curl
+      - ca-certificates
+      - gnupg
+      - apt-transport-https
+    state: present
+

@@ -1,0 +1,11 @@
+- name: Install podman
+  apt:
+    name: podman
+    state: present
+
+- name: Enable podman socket
+  systemd:
+    name: podman.socket
+    enabled: true
+    state: started
+

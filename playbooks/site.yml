@@ -7,4 +7,4 @@
     - git
     - podman
     - k3s
-
+    - argocd

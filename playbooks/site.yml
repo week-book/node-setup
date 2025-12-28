@@ -8,3 +8,4 @@
     - podman
     - k3s
     - argocd
+    - sealed_secrets

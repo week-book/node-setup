@@ -1,0 +1,10 @@
+- name: Check if Sealed Secrets controller exists
+  shell: kubectl get deployment sealed-secrets-controller -n kube-system
+  register: sealed_secrets_check
+  ignore_errors: true
+
+- name: Install Sealed Secrets controller
+  shell: |
+    kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.26.3/controller.yaml
+  when: sealed_secrets_check.rc != 0
+

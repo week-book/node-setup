@@ -9,3 +9,4 @@
     - k3s
     - argocd
     - sealed_secrets
+    - ingress_nginx

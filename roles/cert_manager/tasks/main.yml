@@ -1,0 +1,29 @@
+- name: Check if cert-manager exists
+  shell: kubectl get deployment cert-manager -n cert-manager
+  register: cert_manager_check
+  ignore_errors: true
+
+- name: Install cert-manager
+  shell: |
+    kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.3/cert-manager.yaml
+  when: cert_manager_check.rc != 0
+
+- name: Wait for cert-manager to be ready
+  shell: |
+    kubectl wait --namespace cert-manager \
+      --for=condition=ready pod \
+      --selector=app.kubernetes.io/instance=cert-manager \
+      --timeout=120s
+  when: cert_manager_check.rc != 0
+
+- name: Copy ClusterIssuer manifest
+  copy:
+    src: cluster-issuer.yaml
+    dest: /tmp/cluster-issuer.yaml
+
+- name: Apply ClusterIssuer
+  shell: kubectl apply -f /tmp/cluster-issuer.yaml
+  register: cluster_issuer_result
+  retries: 5
+  delay: 10
+  until: cluster_issuer_result.rc == 0

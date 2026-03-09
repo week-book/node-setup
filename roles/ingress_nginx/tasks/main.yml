@@ -1,0 +1,17 @@
+- name: Check if ingress-nginx exists
+  shell: kubectl get deployment ingress-nginx-controller -n ingress-nginx
+  register: ingress_nginx_check
+  ignore_errors: true
+
+- name: Install ingress-nginx
+  shell: |
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.0/deploy/static/provider/cloud/deploy.yaml
+  when: ingress_nginx_check.rc != 0
+
+- name: Wait for ingress-nginx controller to be ready
+  shell: |
+    kubectl wait --namespace ingress-nginx \
+      --for=condition=ready pod \
+      --selector=app.kubernetes.io/component=controller \
+      --timeout=120s
+  when: ingress_nginx_check.rc != 0

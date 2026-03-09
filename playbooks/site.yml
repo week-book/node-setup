@@ -10,3 +10,4 @@
     - argocd
     - sealed_secrets
     - ingress_nginx
+    - cert_manager
